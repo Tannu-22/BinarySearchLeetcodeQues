@@ -1,0 +1,90 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+// Function to check whether the book allocation to student is possible or not.
+
+bool allocationIsPossible(int A[],int barrier,int N,int M)
+{
+     int allocatedStudent=1;
+     int totalPages=0;
+   
+     for(int i=0;i<N;i++)
+     { 
+        // If the no of pages is already greater then the barrier or mid then,allocation is not possible.
+        if(A[i]>barrier)
+        return false;
+       
+       // If pages is less than the barrier then,we can add pages to totalPages
+       else if(totalPages+A[i]<=barrier)
+       totalPages+=A[i];
+       
+       //if pages are greater then ,we allocate pages to next student.
+       else 
+       {
+       allocatedStudent++;
+       totalPages=A[i];
+       }
+      
+       //To check whether we have more student or not
+       if(allocatedStudent>M)
+       return false;
+   }
+  
+   return true;
+}
+
+
+
+class Solution 
+{
+    public:
+    
+    //Function to find minimum number of pages.
+    int findPages(int A[], int N, int M) 
+    {
+        int sum=0;
+        for(int i=0;i<N;i++)
+        sum=sum+A[i];
+        
+        int low=0;
+        int high=sum;
+        int ans=-1;
+        
+        while(low<=high)
+        {
+            int mid=(low+high)/2;
+            if(M>N)
+            return -1;
+            if(allocationIsPossible(A,mid,N,M))
+            {
+                ans=mid;
+                high=mid-1;
+            }
+            else
+            low=mid+1;
+        }
+        return ans;
+    }  
+    
+    
+};
+
+int main() 
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n;
+        cin>>n;
+        int A[n];
+        for(int i=0;i<n;i++)
+            cin>>A[i];
+        int m;
+        cin>>m;
+        Solution ob;
+        cout << ob.findPages(A, n, m) << endl;
+    }
+    return 0;
+}
+
